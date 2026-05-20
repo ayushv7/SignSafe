@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contract Checker — AI-Powered Document Analyzer</title>
+  <meta name="description" content="Upload contracts, insurance papers, or legal documents. AI analyzes risks, hidden clauses, and legal issues before you sign.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  </script>
+  <!-- Mammoth.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-brand">
+      <img src="assets/favicon.svg" alt="Contract Checker">
+      <div>
+        <h1>Contract Checker</h1>
+        <span>AI-Powered Document Analyzer</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="provider-badge pollinations" id="provider-badge">🌐 Free AI</span>
+      <button class="btn-settings" id="btn-settings">
+        ⚙️ Settings
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Upload Section -->
+    <section class="upload-section" id="upload-section">
+      <h2>Analyze Your <em>Contracts</em> Before Signing</h2>
+      <p>Upload any contract, insurance policy, or legal document for instant AI-powered risk analysis.</p>
+
+      <div class="upload-zone" id="upload-zone">
+        <div class="upload-icon">📄</div>
+        <h3>Drop your document here</h3>
+        <p class="subtext">or click to browse files</p>
+        <div class="file-types">
+          <span>PDF</span>
+          <span>DOCX</span>
+          <span>TXT</span>
+        </div>
+        <input type="file" id="file-input" accept=".pdf,.docx,.txt">
+      </div>
+
+      <!-- File Info Bar -->
+      <div class="file-info" id="file-info">
+        <span class="fi-icon">📎</span>
+        <div class="fi-details">
+          <div class="fi-name" id="fi-name"></div>
+          <div class="fi-meta" id="fi-meta"></div>
+        </div>
+        <button class="btn-analyze" id="btn-analyze" disabled>Analyze Document</button>
+        <button class="btn-remove" id="btn-remove" title="Remove file">✕</button>
+      </div>
+    </section>
+
+    <!-- Results Dashboard -->
+    <section class="results" id="results">
+      <div class="results-header">
+        <h2>📊 Analysis Results</h2>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-export" id="btn-export">📥 Export Report</button>
+          <button class="btn-new" id="btn-new">+ New Analysis</button>
+        </div>
+      </div>
+
+      <!-- Top Row: Score + Summary -->
+      <div class="top-row fade-in">
+        <!-- Risk Score -->
+        <div class="score-card">
+          <div class="score-gauge">
+            <svg width="160" height="160">
+              <circle class="bg" cx="80" cy="80" r="70"></circle>
+              <circle class="fill" id="score-fill" cx="80" cy="80" r="70"></circle>
+            </svg>
+            <div class="score-value">
+              <span class="number" id="score-number">0</span>
+              <span class="label">Risk Score</span>
+            </div>
+          </div>
+          <span class="risk-badge" id="risk-badge">LOW</span>
+          <div class="doc-type" id="doc-type">Document</div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-card">
+          <h3>📋 Document Summary</h3>
+          <p id="summary-text"></p>
+          <div class="doc-meta">
+            <span class="meta-item">Pages: <strong id="meta-pages">-</strong></span>
+            <span class="meta-item">Words: <strong id="meta-words">-</strong></span>
+            <span class="meta-item">Clauses Found: <strong id="meta-clauses">-</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warnings -->
+      <div class="section-card fade-in fade-in-d1" id="warnings-section">
+        <h3>🚨 Red Flags & Warnings <span class="count" id="warnings-count">0</span></h3>
+        <div id="warnings-list"></div>
+      </div>
+
+      <!-- Clause Analysis -->
+      <div class="section-card fade-in fade-in-d2">
+        <h3>📝 Clause-by-Clause Analysis <span class="count" id="clauses-count">0</span></h3>
+        <div id="clauses-list"></div>
+      </div>
+
+      <!-- Missing Clauses -->
+      <div class="section-card fade-in fade-in-d3" id="missing-section">
+        <h3>📋 Missing Clauses <span class="count" id="missing-count">0</span></h3>
+        <div id="missing-list"></div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="section-card fade-in fade-in-d3">
+        <h3>💡 Recommendations <span class="count" id="recommendations-count">0</span></h3>
+        <div id="recommendations-list"></div>
+      </div>
+
+      <!-- Legal Terms Glossary -->
+      <div class="section-card fade-in fade-in-d4" id="terms-section">
+        <h3>📖 Legal Terms Explained <span class="count" id="terms-count">0</span></h3>
+        <div class="terms-grid" id="terms-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="scanner">
+      <div class="scanner-ring"></div>
+      <div class="scanner-ring"></div>
+      <div class="scanner-ring"></div>
+    </div>
+    <h3>Analyzing Your Document</h3>
+    <p>This may take a few moments...</p>
+    <ul class="loading-steps">
+      <li>📄 Extracting text from document</li>
+      <li>🤖 AI analyzing clauses & risks</li>
+      <li>✨ Preparing your report</li>
+    </ul>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-backdrop" id="settings-modal">
+    <div class="modal">
+      <h3>⚙️ AI Provider Settings</h3>
+      <p class="modal-desc">Choose an AI provider. All options below have <strong>free tiers</strong> — no credit card required.</p>
+
+      <label for="provider-select">AI Provider</label>
+      <select id="provider-select" class="modal-select">
+        <option value="groq">⚡ Groq (Recommended — Fastest)</option>
+        <option value="openrouter">🔀 OpenRouter (Free models)</option>
+        <option value="gemini">✨ Google Gemini</option>
+        <option value="pollinations">🌐 Pollinations (No key, slow)</option>
+      </select>
+      <p class="provider-desc" id="provider-desc">Fastest inference. Free tier, no credit card needed.</p>
+
+      <div id="key-group">
+        <label for="api-key-input">API Key</label>
+        <input type="password" id="api-key-input" placeholder="Enter your API key...">
+        <p class="signup-hint">Get a free key: <a href="https://console.groq.com" id="signup-link" target="_blank" rel="noopener">Sign up here →</a></p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="btn-modal-cancel">Cancel</button>
+        <button class="btn-modal-save" id="btn-modal-save">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="parser.js"></script>
+  <script src="analyzer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

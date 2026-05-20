@@ -1,0 +1,35 @@
+EMPLOYMENT CONTRACT
+
+This Employment Agreement ("Agreement") is entered into as of January 15, 2026, by and between TechCorp Industries LLC ("Company") and John Smith ("Employee").
+
+1. POSITION AND DUTIES
+Employee shall serve as Senior Software Engineer. Employee agrees to devote full-time effort exclusively to the Company and shall not engage in any other employment or consulting work without prior written consent.
+
+2. COMPENSATION
+Employee shall receive an annual salary of $120,000, payable bi-weekly. The Company reserves the right to modify compensation at any time at its sole discretion without prior notice.
+
+3. NON-COMPETE CLAUSE
+Upon termination of employment, Employee agrees not to work for any competing company or start a competing business within a 200-mile radius for a period of 3 years. This restriction applies regardless of the reason for termination.
+
+4. INTELLECTUAL PROPERTY
+All work, inventions, ideas, and creations made by Employee during the term of employment, including those made outside of work hours and using personal resources, shall be the sole property of the Company.
+
+5. TERMINATION
+The Company may terminate this Agreement at any time, for any reason, with or without cause, and without notice. Employee must provide 90 days written notice before resignation.
+
+6. INDEMNIFICATION
+Employee agrees to indemnify and hold harmless the Company from any and all claims, damages, losses, and expenses arising from Employee's performance of duties.
+
+7. ARBITRATION
+Any disputes arising under this Agreement shall be resolved through binding arbitration. Employee waives the right to a jury trial and agrees to bear all arbitration costs.
+
+8. MODIFICATION
+This Agreement may be modified by the Company at any time without Employee's consent. Continued employment constitutes acceptance of any modifications.
+
+9. GOVERNING LAW
+This Agreement shall be governed by the laws of the State of Delaware.
+
+SIGNATURES:
+Company Representative: _______________
+Employee: _______________
+Date: _______________
